@@ -85,7 +85,6 @@ public class Main {
             }
         }
     }
-
     public static void copyFiles(String dir, String typeOfFile, String destDir) throws IOException {
         File folder = new File(dir);
         File[] files = folder.listFiles();
