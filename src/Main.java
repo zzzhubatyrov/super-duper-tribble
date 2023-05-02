@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 public class Main {
     protected static LinkedList<File> dirFile = new LinkedList<>();
-    protected static LinkedList<String> linkedMenu = new LinkedList<String>();
+    protected static LinkedList<String> linkedMenu = new LinkedList<>();
     protected static Scanner sc = new Scanner(System.in);
     protected static String path;
     protected static String folderName;
@@ -37,6 +37,7 @@ public class Main {
         System.out.println("1: Create Folder\n2: Search & Copy Files");
 
         int swMenu = sc.nextInt();
+        sc.nextLine(); // clear buffer
         switch (swMenu) {
             case 1:
                 System.out.print("CREATE FOLDER: \nEntry Folder Name: ");
@@ -45,18 +46,25 @@ public class Main {
                 createFolder(allPath, folderName);
                 break;
             case 2:
-                System.out.print("ENTRY DIR FOR SEARCH FILES: ");
-                folderName = sc.next() + "\\";
+                System.out.print("ENTRY DIR FOR SEARCH FILES (PRESS ENTER TO SEARCH FROM CURRENT DIRECTORY): ");
+                if (sc.hasNextLine()) {     // проверяем наличие строки в буфере ввода
+                    folderName = sc.nextLine();
+                } else {
+                    folderName = "";        // используем пустую строку, если ввода не было
+                }
                 linkedMenu.add(folderName);
                 allPath = linkedMenu.get(0) + linkedMenu.get(1);
                 System.out.print("ENTRY TYPE FILES: ");
-                String typeOfFile = sc.next();
-//                System.out.print("ENTRY DEST DIR: ");
-//                String destDir = sc.next();
-                searchFiles(allPath, typeOfFile);
-                Thread.sleep(5000);
-                // destDir: "C:\\Users\\zen\\Desktop\\rw2\\"
-                testFunc();
+                String typeOfFile = sc.nextLine();
+                System.out.print("Do you want to see the files in the directory? (yes/no): ");
+                String answer = sc.nextLine();
+                if (answer.equals("yes")) {
+                    // просмотреть файлы в директории
+                    viewFilesInDirectory(allPath, typeOfFile);
+                } else {
+                    // только поиск файлов
+                    searchFiles(allPath, typeOfFile);
+                }
                 break;
             case 3:
                 break;
@@ -80,9 +88,27 @@ public class Main {
         for (File file: files) {
             if (file.isDirectory()) {
                 searchFiles(String.valueOf(file), typeOfFile);
-            } else if (file.getName().endsWith(typeOfFile)) {
+            } else if (file.getName().toLowerCase().contains(typeOfFile.toLowerCase())) {
                 dirFile.add(new File(file.getAbsolutePath()));
             }
+        }
+    }
+    public static void viewFilesInDirectory(String path, String typeOfFile) {
+        File folder = new File(path);
+        File[] files = folder.listFiles();
+        for (File file: files) {
+            if (file.isDirectory()) {
+                viewFilesInDirectory(String.valueOf(file), typeOfFile);
+            } else if (file.getName().toLowerCase().contains(typeOfFile.toLowerCase())) {
+                dirFile.add(new File(file.getAbsolutePath()));
+                getFiles(files);
+                break;
+            }
+        }
+    }
+    public static void getFiles(File[] files) {
+        for (int i = 0; i < files.length; i++) {
+            System.out.println(files[i]);
         }
     }
     public static void copyFiles(String dir, String typeOfFile, String destDir) throws IOException {
