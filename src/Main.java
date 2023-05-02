@@ -14,6 +14,7 @@ public class Main {
     protected static String path;
     protected static String folderName;
     protected static String allPath;
+    protected static String typeOfFile;
 
     public static void main(String[] args) {
         try {
@@ -55,7 +56,7 @@ public class Main {
                 linkedMenu.add(folderName);
                 allPath = linkedMenu.get(0) + linkedMenu.get(1);
                 System.out.print("ENTRY TYPE FILES: ");
-                String typeOfFile = sc.nextLine();
+                typeOfFile = sc.nextLine();
                 System.out.print("Do you want to see the files in the directory? (yes/no): ");
                 String answer = sc.nextLine();
                 if (answer.equals("yes")) {
@@ -67,6 +68,19 @@ public class Main {
                 }
                 break;
             case 3:
+                System.out.print("ENTRY DIR FOR SEARCH FILES (PRESS ENTER TO SEARCH FROM CURRENT DIRECTORY): ");
+                if (sc.hasNextLine()) {     // проверяем наличие строки в буфере ввода
+                    folderName = sc.nextLine();
+                } else {
+                    folderName = "";        // используем пустую строку, если ввода не было
+                }
+                linkedMenu.add(folderName);
+                allPath = linkedMenu.get(0) + linkedMenu.get(1);
+                System.out.print("ENTRY TYPE FILES: ");
+                typeOfFile = sc.nextLine();
+                System.out.println("ENTRY DEST DIR: ");
+                String destDir = sc.nextLine();
+                copyFiles(allPath, typeOfFile, destDir);
                 break;
         }
     }
