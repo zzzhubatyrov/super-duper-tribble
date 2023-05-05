@@ -1,3 +1,5 @@
+import jdk.jfr.Unsigned;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,7 +22,7 @@ public class Main {
         try {
             mainMenu();
         } catch (Exception e) {
-            // clearScreen();
+            e.getMessage();
         }
     }
 
@@ -115,14 +117,11 @@ public class Main {
                 viewFilesInDirectory(String.valueOf(file), typeOfFile);
             } else if (file.getName().toLowerCase().contains(typeOfFile.toLowerCase())) {
                 dirFile.add(new File(file.getAbsolutePath()));
-                getFiles(files);
+                for (var f: dirFile) {
+                    System.out.println(f);
+                }
                 break;
             }
-        }
-    }
-    public static void getFiles(File[] files) {
-        for (int i = 0; i < files.length; i++) {
-            System.out.println(files[i]);
         }
     }
     public static void copyFiles(String dir, String typeOfFile, String destDir) throws IOException {
@@ -139,14 +138,9 @@ public class Main {
         }
     }
 
-    public static void testFunc() {
-        for (var f: dirFile) {
-            System.out.println(f);
-        }
-    }
-
-//    public static void clearScreen() {
-//        System.out.print("\033[H\033[2J");
-//        System.out.flush();
+//    public static void testFunc() {
+//        for (var f: dirFile) {
+//            System.out.println(f);
+//        }
 //    }
 }
